@@ -1,0 +1,13 @@
+{
+    "development": {
+        "username": "avnadmin",
+        "password": "AVNS_qK6TBMPxu0nxHXvFZuG",
+        "database": "defaultdb",
+        "dialect": "mysql",
+        "host": "wings-sql-dennys-f769.a.aivencloud.com",
+        "port":"19840",
+        "serviceUri":"mysql://avnadmin:AVNS_qK6TBMPxu0nxHXvFZuG@wings-sql-dennys-f769.a.aivencloud.com:19840/defaultdb?ssl-mode=REQUIRED",
+        "charset": "utf8",
+        "timezone": "-05:00"
+    }
+}
