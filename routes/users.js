@@ -63,23 +63,23 @@ const middlewareAutentificacion = async (req, res, next) => {
     }
 };
 
-router.get('/listar/roles', rolController.listar);
-router.post('/guardar/roles', rolController.guardar);
+router.get('/listar/roles',middlewareAutentificacion, rolController.listar);
+router.post('/guardar/roles',middlewareAutentificacion, rolController.guardar);
 
 router.post('/iniciar_sesion', cuentaController.inicio_sesion); //
 router.get('/listar/cuentas',middlewareAutentificacion, cuentaController.listar);
 
 
-router.get('/listar/personas', personaController.listar);
+router.get('/listar/personas',middlewareAutentificacion, personaController.listar);
 router.post('/modificar/persona/:external',middlewareAutentificacion, personaController.modificar);
-router.post('/guardar/personas', personaController.guardar);
+router.post('/guardar/personas',middlewareAutentificacion, personaController.guardar);
 router.get('/obtener/persona/:external',middlewareAutentificacion, personaController.obtener);
 
 
 router.get('/listar/productos',middlewareAutentificacion, productoController.listar); //
 router.post('/modificar/producto/:external',middlewareAutentificacion, productoController.modificar); //
 router.post('/guardar/productos',middlewareAutentificacion, productoController.guardar); //
-router.get('/obtener/productos/:external', productoController.obtener); //
+router.get('/obtener/productos/:external',middlewareAutentificacion, productoController.obtener); //
 router.post('/darbaja/producto/:external',middlewareAutentificacion, productoController.darBaja); //
 
 router.get('/listar/categorias',middlewareAutentificacion, categoriaController.listar); //
@@ -99,13 +99,13 @@ router.get('/listar/detalles',middlewareAutentificacion, detalleController.lista
 router.post('/modificar/detalle/:external',middlewareAutentificacion, detalleController.modificar);
 router.post('/guardar/detalles',middlewareAutentificacion, detalleController.guardar);
 router.get('/obtener/detalle/:external',middlewareAutentificacion, detalleController.obtener);
-router.get('/listar/detalle/venta/:external', detalleController.listarDetalleVenta);
+router.get('/listar/detalle/venta/:external',middlewareAutentificacion, detalleController.listarDetalleVenta);
 
 
 router.get('/listar/last/ventas',middlewareAutentificacion,ventaController.listarUltimasVentas); //
 router.get('/listar/ventas',middlewareAutentificacion, ventaController.listar); //
 router.post('/modificar/venta/:external',middlewareAutentificacion, ventaController.modificar);
-router.post('/guardar/ventas', ventaController.guardar);
+router.post('/guardar/ventas',middlewareAutentificacion, ventaController.guardar);
 router.get('/obtener/venta/:external',middlewareAutentificacion, ventaController.obtener); //
 router.post('/darbaja/venta/:external',middlewareAutentificacion, ventaController.darBaja);
 router.post('/cambiarEstado/venta/:external',middlewareAutentificacion, ventaController.cambiarEstado);
@@ -115,5 +115,5 @@ router.post('/filtrarVentasPorFecha',middlewareAutentificacion, ventaController.
 
 
 
-router.post('/cambiarEstado/all/ventas', ventaController.cambiarEstadoAllVentas);
+router.post('/cambiarEstado/all/ventas',middlewareAutentificacion, ventaController.cambiarEstadoAllVentas);
 module.exports = router;
