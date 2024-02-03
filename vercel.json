@@ -7,6 +7,10 @@
     ],
     "routes": [
       {
+        "src": "/totos/(.*)",
+        "dest": "/totos/$1"
+      },
+      {
         "src": "/(.*)",
         "dest": "/"
       }
