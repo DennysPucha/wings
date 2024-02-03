@@ -1,18 +1,19 @@
 {
     "builds": [
       {
-        "src": "./app.js",
+        "src": "./index.js",
         "use": "@vercel/node"
       }
     ],
     "routes": [
-      {
-        "src": "/totos/(.*)",
-        "dest": "/totos/$1"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/"
-      }
+        {
+          "src": "/api/(.*)",
+          "dest": "routes/users.js"
+        },
+        {
+          "src": "/(.*)",
+          "dest": "/index.html"
+        }
     ]
+    
   }
