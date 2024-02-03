@@ -1,8 +1,11 @@
 const express = require("express");
+const cors = require('cors');
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
 const app = express();
-
+app.use(cors({ origin: '*' })); 
 const port = process.env.PORT || 3000;
-
+app.use('/totos', usersRouter);
 app.get("/", (req, res) => {
   const htmlResponse = `
     <html>
