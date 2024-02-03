@@ -9,10 +9,6 @@
         {
           "src": "/api/(.*)",
           "dest": "routes/users.js"
-        },
-        {
-          "src": "/(.*)",
-          "dest": "/index.html"
         }
     ]
     
