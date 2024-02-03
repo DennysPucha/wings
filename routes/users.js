@@ -67,53 +67,53 @@ router.get('/listar/roles', rolController.listar);
 router.post('/guardar/roles', rolController.guardar);
 
 router.post('/iniciar_sesion', cuentaController.inicio_sesion); //
-// router.get('/listar/cuentas',middlewareAutentificacion, cuentaController.listar);
+router.get('/listar/cuentas',middlewareAutentificacion, cuentaController.listar);
 
 
-// router.get('/listar/personas', personaController.listar);
-// router.post('/modificar/persona/:external',middlewareAutentificacion, personaController.modificar);
-// router.post('/guardar/personas', personaController.guardar);
-// router.get('/obtener/persona/:external',middlewareAutentificacion, personaController.obtener);
+router.get('/listar/personas', personaController.listar);
+router.post('/modificar/persona/:external',middlewareAutentificacion, personaController.modificar);
+router.post('/guardar/personas', personaController.guardar);
+router.get('/obtener/persona/:external',middlewareAutentificacion, personaController.obtener);
 
 
-// router.get('/listar/productos',middlewareAutentificacion, productoController.listar); //
-// router.post('/modificar/producto/:external',middlewareAutentificacion, productoController.modificar); //
-// router.post('/guardar/productos',middlewareAutentificacion, productoController.guardar); //
-// router.get('/obtener/productos/:external', productoController.obtener); //
-// router.post('/darbaja/producto/:external',middlewareAutentificacion, productoController.darBaja); //
+router.get('/listar/productos',middlewareAutentificacion, productoController.listar); //
+router.post('/modificar/producto/:external',middlewareAutentificacion, productoController.modificar); //
+router.post('/guardar/productos',middlewareAutentificacion, productoController.guardar); //
+router.get('/obtener/productos/:external', productoController.obtener); //
+router.post('/darbaja/producto/:external',middlewareAutentificacion, productoController.darBaja); //
 
-// router.get('/listar/categorias',middlewareAutentificacion, categoriaController.listar); //
-// router.post('/modificar/categoria/:external',middlewareAutentificacion, categoriaController.modificar);
-// router.post('/guardar/categorias',middlewareAutentificacion, categoriaController.guardar); //
-// router.get('/obtener/categorias/:external',middlewareAutentificacion, categoriaController.obtener);
-// router.post('/darbaja/categoria/:external',middlewareAutentificacion, categoriaController.eliminarCategoria); //
+router.get('/listar/categorias',middlewareAutentificacion, categoriaController.listar); //
+router.post('/modificar/categoria/:external',middlewareAutentificacion, categoriaController.modificar);
+router.post('/guardar/categorias',middlewareAutentificacion, categoriaController.guardar); //
+router.get('/obtener/categorias/:external',middlewareAutentificacion, categoriaController.obtener);
+router.post('/darbaja/categoria/:external',middlewareAutentificacion, categoriaController.eliminarCategoria); //
 
-// router.get('/listar/resumenes',middlewareAutentificacion, resumenController.listar);
-// router.post('/modificar/resumen/:external',middlewareAutentificacion, resumenController.modificar);
-// router.post('/guardar/resumenes',middlewareAutentificacion, resumenController.guardar);
-// router.get('/obtener/resumen/:external',middlewareAutentificacion, resumenController.obtener);
-// router.post('/generar/resumen/endia',middlewareAutentificacion, resumenController.generarResumenDiario);
-// router.post('/generar/resumen/semanal',middlewareAutentificacion, resumenController.generarResumenSemana);
+router.get('/listar/resumenes',middlewareAutentificacion, resumenController.listar);
+router.post('/modificar/resumen/:external',middlewareAutentificacion, resumenController.modificar);
+router.post('/guardar/resumenes',middlewareAutentificacion, resumenController.guardar);
+router.get('/obtener/resumen/:external',middlewareAutentificacion, resumenController.obtener);
+router.post('/generar/resumen/endia',middlewareAutentificacion, resumenController.generarResumenDiario);
+router.post('/generar/resumen/semanal',middlewareAutentificacion, resumenController.generarResumenSemana);
 
-// router.get('/listar/detalles',middlewareAutentificacion, detalleController.listar);
-// router.post('/modificar/detalle/:external',middlewareAutentificacion, detalleController.modificar);
-// router.post('/guardar/detalles',middlewareAutentificacion, detalleController.guardar);
-// router.get('/obtener/detalle/:external',middlewareAutentificacion, detalleController.obtener);
-// router.get('/listar/detalle/venta/:external', detalleController.listarDetalleVenta);
-
-
-// router.get('/listar/last/ventas',middlewareAutentificacion,ventaController.listarUltimasVentas); //
-// router.get('/listar/ventas',middlewareAutentificacion, ventaController.listar); //
-// router.post('/modificar/venta/:external',middlewareAutentificacion, ventaController.modificar);
-// router.post('/guardar/ventas', ventaController.guardar);
-// router.get('/obtener/venta/:external',middlewareAutentificacion, ventaController.obtener); //
-// router.post('/darbaja/venta/:external',middlewareAutentificacion, ventaController.darBaja);
-// router.post('/cambiarEstado/venta/:external',middlewareAutentificacion, ventaController.cambiarEstado);
-// router.post('/guardar/DetalleVenta',middlewareAutentificacion, ventaController.guardarVentaConDetalle); //
-// router.post('/modificar/DetalleVenta/:external',middlewareAutentificacion, ventaController.modificarVentaConDetalle);
-// router.post('/filtrarVentasPorFecha',middlewareAutentificacion, ventaController.filtrarVentasPorFecha);
+router.get('/listar/detalles',middlewareAutentificacion, detalleController.listar);
+router.post('/modificar/detalle/:external',middlewareAutentificacion, detalleController.modificar);
+router.post('/guardar/detalles',middlewareAutentificacion, detalleController.guardar);
+router.get('/obtener/detalle/:external',middlewareAutentificacion, detalleController.obtener);
+router.get('/listar/detalle/venta/:external', detalleController.listarDetalleVenta);
 
 
+router.get('/listar/last/ventas',middlewareAutentificacion,ventaController.listarUltimasVentas); //
+router.get('/listar/ventas',middlewareAutentificacion, ventaController.listar); //
+router.post('/modificar/venta/:external',middlewareAutentificacion, ventaController.modificar);
+router.post('/guardar/ventas', ventaController.guardar);
+router.get('/obtener/venta/:external',middlewareAutentificacion, ventaController.obtener); //
+router.post('/darbaja/venta/:external',middlewareAutentificacion, ventaController.darBaja);
+router.post('/cambiarEstado/venta/:external',middlewareAutentificacion, ventaController.cambiarEstado);
+router.post('/guardar/DetalleVenta',middlewareAutentificacion, ventaController.guardarVentaConDetalle); //
+router.post('/modificar/DetalleVenta/:external',middlewareAutentificacion, ventaController.modificarVentaConDetalle);
+router.post('/filtrarVentasPorFecha',middlewareAutentificacion, ventaController.filtrarVentasPorFecha);
 
-// router.post('/cambiarEstado/all/ventas', ventaController.cambiarEstadoAllVentas);
+
+
+router.post('/cambiarEstado/all/ventas', ventaController.cambiarEstadoAllVentas);
 module.exports = router;
