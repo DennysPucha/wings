@@ -11,8 +11,5 @@
         "src": "/(.*)",
         "dest": "app/$1"
       }
-    ],
-    "install": {
-      "include": ["app/package.json"]
-    }
+    ]
   }
