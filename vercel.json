@@ -1,5 +1,14 @@
 {
-    "rewrites": [{
-      "source": "/totos/(.*)", "destination": "./app.js"
-    }]
-  }
+    "builds": [
+        {
+            "src": "./app.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "./"
+        }
+    ]
+}
