@@ -1,4 +1,3 @@
-const express = require("express");
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -11,6 +10,21 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
+// Middleware
+app.use(cors({ origin: '*' }));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Rutas
+app.use('/', indexRouter);
+app.use('/totos', usersRouter);
+
+// Ruta para tu mensaje de bienvenida
 app.get("/", (req, res) => {
   const htmlResponse = `
     <html>
@@ -18,53 +32,36 @@ app.get("/", (req, res) => {
         <title>NodeJs y Express en Vercel</title>
       </head>
       <body>
-        <h1>Soy un proyecto Back end en vercel</h1>
+        <h1>Soy un proyecto Back end en Vercel</h1>
       </body>
     </html>
   `;
   res.send(htmlResponse);
 });
 
-app.listen(port, () => {
-  console.log(`port runing in http://localhost:${port}`);
-}); 
+// Ruta para manejar errores 404
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
+// Manejador de errores
+app.use(function(err, req, res, next) {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.status(err.status || 500);
+  res.render('error');
+});
 
-
-
-app.use(cors({ origin: '*' })); 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/totos', usersRouter);
-
+// Sincronización de la base de datos
 console.log("Ruta de modelos:", path.resolve(__dirname, 'app', 'models'));
 let models = require('./app/models');
-models.sequelize.sync({ force:false, logging: false }).then(() => { //drop
+models.sequelize.sync({ force: false, logging: false }).then(() => {
   console.log("Se ha sincronizado la base de datos");
 }).catch(err => {
   console.log(err, 'Hubo un error al sincronizar la base de datos');
 });
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+// Escucha en el puerto
+app.listen(port, () => {
+  console.log(`Servidor ejecutándose en http://localhost:${port}`);
 });
