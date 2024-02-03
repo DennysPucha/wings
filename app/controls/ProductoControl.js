@@ -110,7 +110,6 @@ class ProductoControl {
                     precio: precio,
                     id_categoria: categoriaA.id,
                     id_persona: personaA.id,
-                    external_id:uuid.v4()
                 };
                 const result = await producto.update(data, { where: { external_id: external } });
                 if (!result) {
