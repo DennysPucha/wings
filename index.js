@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 
 const port = process.env.PORT || 3000;
 var createError = require("http-errors");
