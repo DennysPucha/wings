@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         subtotal: { type: DataTypes.DOUBLE, defaultValue: 0 },
         total: { type: DataTypes.DOUBLE, defaultValue: 0 },
         estado: { type: DataTypes.BOOLEAN, defaultValue: true },
+        metodo: { type: DataTypes.ENUM(['Transferencia','Efectivo','Tarjeta de credito']), defaultValue:"Efectivo"},
         external_id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 }
     }, {freezeTableName: true });
     venta.associate=function(models){

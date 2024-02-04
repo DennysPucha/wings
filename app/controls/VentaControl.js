@@ -11,7 +11,7 @@ class VentaControl{
             const lista = await venta.findOne({
                 where:{external_id:external},
                 include: [{ model: detalle, as: 'detalle', attributes: ['numero','cantidad','producto','precio','external_id'] },],
-                attributes:['numero','fecha','total','subtotal','estado','external_id','hora']
+                attributes:['numero','fecha','total','subtotal','estado','external_id','hora','metodo']
             });
             if(!lista){
                 res.status(404);
@@ -29,7 +29,7 @@ class VentaControl{
         try {
             const lista = await venta.findAll({
                 include: [{ model: detalle, as: 'detalle', attributes: ['numero','cantidad','producto','precio','external_id'] },],
-                attributes:['numero','fecha','total','subtotal','estado','external_id','hora']
+                attributes:['numero','fecha','total','subtotal','estado','external_id','hora','metodo']
             });
             res.status(200);
             res.json({message:"Éxito",code:200,data:lista});
@@ -74,10 +74,10 @@ class VentaControl{
     }
 
     async guardarVentaConDetalle(req, res) {
-        const { total, subtotal, persona: personaId, detalles } = req.body;
+        const { metodo, fecha, total, subtotal, persona: personaId, detalles } = req.body;
         const externalVenta = uuid.v4();
 
-        if (total !== null && subtotal !== null && personaId && detalles && detalles.length > 0) {
+        if (metodo!=null && fecha!=null && total !== null && subtotal !== null && personaId && detalles && detalles.length > 0) {
             try {
                 const personaA = await persona.findOne({ where: { external_id: personaId } });
 
@@ -85,8 +85,14 @@ class VentaControl{
                     res.status(404);
                     return res.json({ message: "Persona no encontrada", code: 404, data: {} });
                 }
+                if(metodo!="Efectivo" && metodo!="Tarjeta de credito" && metodo!="Transferencia"){
+                    res.status(400);
+                    return res.json({ message: "Metodo de pago no valido", code: 400 });
+                }
 
                 const dataVenta = {
+                    metodo: metodo,
+                    fecha:fecha,
                     total: total,
                     subtotal: subtotal,
                     id_persona: personaA.id,
@@ -152,10 +158,10 @@ class VentaControl{
     }
 
     async modificarVentaConDetalle(req, res) {
-        const { total, subtotal, persona: personaId, detalles } = req.body;
+        const { fecha, hora, total, subtotal, persona: personaId, detalles, metodo} = req.body;
         const externalVenta = req.params.external;
 
-        if (total !== null && subtotal !== null && personaId && detalles && detalles.length > 0) {
+        if (metodo!= null && fecha!= null && hora!=null && total !== null && subtotal !== null && personaId && detalles && detalles.length > 0) {
             try {
                 const personaA = await persona.findOne({ where: { external_id: personaId } });
 
@@ -170,8 +176,15 @@ class VentaControl{
                     res.status(404);
                     return res.json({ message: "Venta no encontrada", code: 404, data: {} });
                 }
+                if(metodo!="Efectivo" && metodo!="Tarjeta de credito" && metodo!="Transferencia"){
+                    res.status(400);
+                    return res.json({ message: "Metodo de pago no valido", code: 400 });
+                }
 
                 const dataVenta = {
+                    metodo: metodo,
+                    fecha: fecha,
+                    hora: hora,
                     total: total,
                     subtotal: subtotal,
                     id_persona: personaA.id,
@@ -199,7 +212,7 @@ class VentaControl{
                         return {
                             cantidad: detalle.cantidad,
                             producto: productoA.external_id,
-                            precio: productoA.precio,
+                            precio: detalle.precio,
                             external_id: uuid.v4(),
                             id_venta: resultVenta.id
                         };
@@ -317,11 +330,18 @@ class VentaControl{
     }
     
     async filtrarVentasPorFecha(req, res) {
-        const { fechaInicio, fechaFin } = req.body;
+        const { fechaInicio, fechaFin, metodo } = req.body;
     
         if (!fechaInicio || !fechaFin) {
             res.status(400);
             return res.json({ message: "Faltan fechas", code: 400 });
+        }
+    
+        let whereClause = "v.fecha BETWEEN :fechaInicio AND :fechaFin AND v.estado = true";
+    
+        // Añadir condición para el método de pago si no es "Ninguna"
+        if (metodo !== undefined && metodo !== "Ninguna") {
+            whereClause += " AND v.metodo = :metodo";
         }
     
         try {
@@ -333,13 +353,12 @@ class VentaControl{
                 FROM
                     venta v
                 WHERE
-                    v.fecha BETWEEN :fechaInicio AND :fechaFin
-                    AND v.estado = true
+                    ${whereClause}
                 GROUP BY
                     v.fecha
                 `,
                 {
-                    replacements: { fechaInicio, fechaFin },
+                    replacements: { fechaInicio, fechaFin, metodo },
                     type: sequelize.QueryTypes.SELECT,
                 }
             );
@@ -351,7 +370,6 @@ class VentaControl{
             res.json({ message: "Error interno del servidor", code: 500, error: error.message });
         }
     }
-
     async filtrarVentasPorNumero(req, res) {
         const { numeroVenta } = req.body;
     
