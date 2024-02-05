@@ -29,6 +29,7 @@ class VentaControl{
         try {
             const lista = await venta.findAll({
                 include: [{ model: detalle, as: 'detalle', attributes: ['numero','cantidad','producto','precio','external_id'] },],
+                where:{estado:true},
                 attributes:['numero','fecha','total','subtotal','estado','external_id','hora','metodo']
             });
             res.status(200);
