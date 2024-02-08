@@ -470,14 +470,23 @@ class VentaControl{
             res.json({ message: "Error interno del servidor", code: 500, error: error.message });
         }
     }
+    
     async listarUltimasVentas(req, res) {
         try {
             const lista = await venta.findAll({
                 include: [{ model: detalle, as: 'detalle', attributes: ['numero', 'cantidad', 'producto', 'precio', 'external_id'] }],
-                attributes: ['numero', 'fecha', 'total', 'subtotal', 'estado', 'external_id','hora'],
-                order: [['hora', 'DESC']],
+                attributes: ['numero', 'fecha', 'total', 'subtotal', 'estado', 'external_id', 'hora'],
+                order: [['fecha', 'DESC'], ['hora', 'DESC']],
                 where: { estado: true },
                 limit: 10,
+            });
+    
+            lista.sort((a, b) => {
+                if (a.fecha < b.fecha) return 1;
+                if (a.fecha > b.fecha) return -1;
+                if (a.hora < b.hora) return 1;
+                if (a.hora > b.hora) return -1;
+                return 0;
             });
     
             res.status(200);
