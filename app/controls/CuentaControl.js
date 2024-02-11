@@ -41,7 +41,7 @@ class CuentaControl {
                             require('dotenv').config();
                             const key = process.env.KEY_SEC;
                             const token = jwt.sign(token_data, key, {
-                                expiresIn: '2h'
+                                expiresIn: '24h'
                             });
                             const info = {
                                 usuario:cuentaPersona.persona.apellidos,
