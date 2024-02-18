@@ -1,5 +1,3 @@
-'use strict';
-
 const models = require('../models');
 const Cuenta = models.cuenta;
 const jwt = require('jsonwebtoken');
@@ -40,9 +38,7 @@ class CuentaControl {
                             };
                             require('dotenv').config();
                             const key = process.env.KEY_SEC;
-                            const token = jwt.sign(token_data, key, {
-                                expiresIn: '24h'
-                            });
+                            const token = jwt.sign(token_data, key);
                             const info = {
                                 usuario:cuentaPersona.persona.apellidos,
                                 token: token,
