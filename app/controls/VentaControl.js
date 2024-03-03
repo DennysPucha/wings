@@ -115,7 +115,7 @@ class VentaControl{
                         const productoA = await producto.findOne({ where: { external_id: detalle.producto } });
 
                         if (!productoA) {
-                            return undefined;
+                            return res.json({ message: "Producto no encontrado", code: 404, data: {} });
                         }
 
                         
@@ -413,7 +413,8 @@ class VentaControl{
     
         const pageNumber = parseInt(page) || 1;
         const pageSize = parseInt(itemsPerPage) || 10;
-    
+        
+
         try {
             const offset = (pageNumber - 1) * pageSize;
             const { count, rows } = await venta.findAndCountAll({
@@ -424,15 +425,17 @@ class VentaControl{
                         attributes: ['numero', 'cantidad', 'producto', 'precio', 'external_id']
                     },
                 ],
-                attributes: ['numero', 'fecha', 'total', 'subtotal', 'estado', 'external_id'],
+                attributes: ['numero', 'fecha','hora', 'total', 'subtotal', 'estado', 'external_id'],
                 where: {
                     estado: true, // Only include ventas with estado set to true
                 },
+                order: [['fecha', 'DESC'], ['hora', 'DESC']],
                 limit: pageSize,
                 offset: offset,
             });
     
-            const totalPages = Math.ceil(count / pageSize);
+            const totalItems = await models.venta.count({ where: { estado: true } });
+            const totalPages = Math.ceil(totalItems / pageSize);
     
             res.status(200);
             res.json({

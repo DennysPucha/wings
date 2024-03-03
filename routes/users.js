@@ -112,7 +112,7 @@ router.post('/cambiarEstado/venta/:external',middlewareAutentificacion, ventaCon
 router.post('/guardar/DetalleVenta',middlewareAutentificacion, ventaController.guardarVentaConDetalle); //
 router.post('/modificar/DetalleVenta/:external',middlewareAutentificacion, ventaController.modificarVentaConDetalle);
 router.post('/filtrarVentasPorFecha',middlewareAutentificacion, ventaController.filtrarVentasPorFecha);
-
+router.get( "/listar/paginacion/ventas",middlewareAutentificacion, ventaController.listarConPaginacion);
 
 
 router.post('/cambiarEstado/all/ventas',middlewareAutentificacion, ventaController.cambiarEstadoAllVentas);
