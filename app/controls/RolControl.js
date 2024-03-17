@@ -1,8 +1,9 @@
 'use strict';
-const cron = require("node-cron");
+
 const models = require('../models');
 const Rol = models.rol;
-
+const axios = require("axios");
+const cron = require("node-cron");  
 class RolControl {
     async listar(req, res) {
         try {
@@ -40,12 +41,17 @@ class RolControl {
         }
     }
 
-    iniciarTareaPeriodica(){
-        cron.schedule('*/5 * * * *', async () => {
-            console.log('Consultando roles...');
-            await listar();
+     iniciarTareaPeriodica() {
+        cron.schedule("*/1 * * * *", async () => {
+          console.log("Iniciando tarea periódica de roles...");
+          try {
+            const response = await axios.get("https://wings-vjhy.onrender.com/totos/listar/roles");
+            console.log("Solicitud realizada con éxito:", response.status);
+          } catch (error) {
+            console.error("Error al realizar la solicitud:", error.message);
+          }
         });
-    }
+      }
     
 }
 
