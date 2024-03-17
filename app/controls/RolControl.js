@@ -1,5 +1,5 @@
 'use strict';
-
+const cron = require("node-cron");
 const models = require('../models');
 const Rol = models.rol;
 
@@ -9,6 +9,7 @@ class RolControl {
             const lista = await Rol.findAll({
                 attributes: ['nombre', 'external_id']
             });
+            print(lista);
             res.status(200).json({ message: "EXITO", code: 200, data: lista });
         } catch (error) {
             res.status(500).json({ message: "Error interno del servidor", code: 500, error: error.message });
@@ -38,6 +39,14 @@ class RolControl {
             res.status(500).json({ message: "Error interno del servidor", code: 500, error: error.message });
         }
     }
+
+    iniciarTareaPeriodica(){
+        cron.schedule('*/5 * * * *', async () => {
+            console.log('Consultando roles...');
+            await listar();
+        });
+    }
+    
 }
 
 module.exports = RolControl;

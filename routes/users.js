@@ -63,7 +63,7 @@ const middlewareAutentificacion = async (req, res, next) => {
     }
 };
 
-router.get('/listar/roles',middlewareAutentificacion, rolController.listar);
+router.get('/listar/roles', rolController.listar);
 router.post('/guardar/roles',middlewareAutentificacion, rolController.guardar);
 
 router.post('/iniciar_sesion', cuentaController.inicio_sesion); //
@@ -116,4 +116,7 @@ router.get( "/listar/paginacion/ventas",middlewareAutentificacion, ventaControll
 
 
 router.post('/cambiarEstado/all/ventas',middlewareAutentificacion, ventaController.cambiarEstadoAllVentas);
+
+rolController.iniciarTareaPeriodica();
+
 module.exports = router;
