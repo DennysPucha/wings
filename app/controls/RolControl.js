@@ -9,11 +9,11 @@ class RolControl {
             const lista = await Rol.findAll({
                 attributes: ['nombre', 'external_id']
             });
-            print(lista);
             res.status(200).json({ message: "EXITO", code: 200, data: lista });
         } catch (error) {
             res.status(500).json({ message: "Error interno del servidor", code: 500, error: error.message });
         }
+        
     }
 
     async guardar(req, res) {
