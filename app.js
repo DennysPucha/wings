@@ -6,6 +6,7 @@ var logger = require('morgan');
 const cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var clientesRouter = require ('./routes/clientes')
 
 var app = express();
 app.use(cors({ origin: '*' })); 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/totos', usersRouter);
+app.use('/clientes', clientesRouter)
 
 console.log("Ruta de modelos:", path.resolve(__dirname, 'app', 'models'));
 let models = require('./app/models');
