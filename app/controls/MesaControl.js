@@ -4,7 +4,7 @@ const models = require('../models');
 const { mesa, venta, detalle, producto, sequelize } = models;
 const uuid = require('uuid');
 const Utils = require('../utils/utils');
-const URL_FRONT = "https://totoswings.vercel.app/";
+const URL_FRONT = "https://totoswings.vercel.app/clients/";
 
 class MesaControl {
     async obtener(req, res) {
@@ -31,7 +31,8 @@ class MesaControl {
     async listar(req, res) {
         try {
             const lista = await mesa.findAll({
-                attributes: ['numero', 'external_id']
+		where: { estado: true },
+                attributes: ['numero', 'external_id', "QRCode"],
             });
             res.status(200);
             res.json({ message: "Éxito", code: 200, data: lista });
@@ -203,6 +204,31 @@ class MesaControl {
                     ventas: ventasMesa
                 }
             });
+        } catch (error) {
+            res.status(500);
+            res.json({ message: "Error interno del servidor", code: 500, error: error.message });
+        }
+    }
+
+    async eliminarMesa(req, res){
+        const external = req.params.external;
+        try {
+            const mesaA = await mesa.findOne({ where: { external_id: external } });
+	    
+            if (!mesaA) {
+                res.status(404);
+                return res.json({ message: "Mesa no encontrada", code: 404, data: {} });
+            }
+
+            const result = await mesaA.update({ estado: false });
+
+            if (!result) {
+                res.status(401);
+                return res.json({ message: "ERROR", tag: "No se puede eliminar la mesa", code: 401 });
+            }
+
+            res.status(200);
+            res.json({ message: "ÉXITO", code: 200 });
         } catch (error) {
             res.status(500);
             res.json({ message: "Error interno del servidor", code: 500, error: error.message });

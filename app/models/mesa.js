@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const mesa = sequelize.define('mesa', {
     numero: { type: DataTypes.INTEGER, allowNull: false },
+    estado: { type: DataTypes.BOOLEAN,  defaultValue: true},
     QRCode: { type: DataTypes.TEXT, allowNull: true },
     external_id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 }
   }, { freezeTableName: true });

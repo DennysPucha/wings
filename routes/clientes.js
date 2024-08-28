@@ -10,6 +10,7 @@ const mesaController = new MesaController();
 clientes.get('/mesa', mesaController.listar);
 clientes.get('/mesa/:external', mesaController.obtener);
 clientes.post('/mesa', mesaController.guardar);
+clientes.delete('/mesa/:external', mesaController.eliminarMesa);
 clientes.put('/mesa/:external', mesaController.modificar);
 clientes.post('/mesa/generarVenta/:external', mesaController.guardarVentaMesa);
 clientes.put('/mesa/modificarVenta/:external', mesaController.modificarVentaMesa);

@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         descripcion: { type: DataTypes.STRING(300), defaultValue: "NONE" },
         costo: { type: DataTypes.DOUBLE, defaultValue: 0 },
         precio: { type: DataTypes.DOUBLE, defaultValue: 0 },
+        stock: { type: DataTypes.BOOLEAN, defaultValue: true },
         estado: { type: DataTypes.BOOLEAN, defaultValue: true },
         imagen: { type: DataTypes.STRING(300), defaultValue: "NONE" },
         external_id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 }

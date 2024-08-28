@@ -11,6 +11,7 @@ const CategoriaController = require('../app/controls/CategoriaControl');
 const ResumenController = require('../app/controls/ResumenControl');
 const DetalleController = require('../app/controls/DetalleControl');
 const VentaController = require('../app/controls/VentaControl');
+var clientesRouter = require ('./clientes')
 
 
 const personaController = new PersonaController();
@@ -22,6 +23,7 @@ const resumenController = new ResumenController();
 const detalleController = new DetalleController();
 const ventaController = new VentaController();
 
+router.use('/clientes', clientesRouter)
 
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
@@ -78,9 +80,11 @@ router.get('/obtener/persona/:external', personaController.obtener);
 
 router.get('/listar/productos', productoController.listar); //
 router.post('/modificar/producto/:external', productoController.modificar); //
+router.post('/modificar/productosConImagen/:external', productoController.modificarProductoConImagen); 
 router.post('/guardar/productos', productoController.guardar); //
 router.get('/obtener/productos/:external', productoController.obtener); //
 router.post('/darbaja/producto/:external', productoController.darBaja); //
+router.post('/guardar/productosConImagen', productoController.guardarProductoConImagen); //
 
 router.get('/listar/categorias', categoriaController.listar); //
 router.post('/modificar/categoria/:external', categoriaController.modificar);
