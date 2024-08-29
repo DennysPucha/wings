@@ -205,56 +205,66 @@ class ProductoControl {
       
       async modificarProductoConImagen(req, res) {
         const external = req.params.external;
-        const { nombre, descripcion, costo, precio, categoria: categoriaId, persona: personaId } = req.body;
+        const { nombre, descripcion, costo, precio, categoria: categoriaId, persona: personaId, imagenUrl } = req.body;
         const imagenFile = req.files ? req.files.imagen : null;
-      
-        if (nombre && descripcion && costo && precio && categoriaId && personaId && imagenFile) {
-          try {
-            const categoriaA = await categoria.findOne({ where: { external_id: categoriaId } });
-            if (!categoriaA) {
-              return res.status(404).json({ message: "Categoria no encontrada", code: 404, data: {} });
+    
+        if (nombre && descripcion && costo && precio && categoriaId && personaId && (imagenFile || imagenUrl)) {
+            try {
+                const categoriaA = await categoria.findOne({ where: { external_id: categoriaId } });
+                if (!categoriaA) {
+                    return res.status(404).json({ message: "Categoria no encontrada", code: 404, data: {} });
+                }
+    
+                const personaA = await persona.findOne({ where: { external_id: personaId } });
+                if (!personaA) {
+                    return res.status(404).json({ message: "Persona no encontrada", code: 404, data: {} });
+                }
+    
+                const productoA = await producto.findOne({ where: { external_id: external } });
+                if (!productoA) {
+                    return res.status(404).json({ message: "Producto no encontrado", code: 404, data: {} });
+                }
+    
+                let imageUrl;
+    
+                if (imagenFile) {
+                    // Subir imagen a Cloudinary
+                    const uploadResult = await cloudinary.uploader.upload(imagenFile.tempFilePath, {
+                        folder: 'productos',
+                        public_id: `producto_${uuid.v4()}`,
+                    });
+                    imageUrl = uploadResult.secure_url;
+                } else if (imagenUrl) {
+                    // Use the existing image URL
+                    imageUrl = imagenUrl;
+                } else {
+                    return res.status(400).json({ message: "Se requiere una imagen", code: 400 });
+                }
+    
+                const data = {
+                    nombre,
+                    descripcion,
+                    costo,
+                    precio,
+                    id_categoria: categoriaA.id,
+                    id_persona: personaA.id,
+                    imagen: imageUrl,
+                };
+    
+                const result = await producto.update(data, { where: { external_id: external } });
+                if (!result) {
+                    return res.status(401).json({ message: "No se puede modificar", code: 401 });
+                }
+    
+                res.status(200).json({ message: "Éxito", code: 200 });
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ message: "Error interno del servidor", code: 500, error: error.message });
             }
-      
-            const personaA = await persona.findOne({ where: { external_id: personaId } });
-            if (!personaA) {
-              return res.status(404).json({ message: "Persona no encontrada", code: 404, data: {} });
-            }
-      
-            const productoA = await producto.findOne({ where: { external_id: external } });
-            if (!productoA) {
-              return res.status(404).json({ message: "Producto no encontrado", code: 404, data: {} });
-            }
-      
-            // Subir imagen a Cloudinary
-            const uploadResult = await cloudinary.uploader.upload(imagenFile.tempFilePath, {
-              folder: 'productos',
-              public_id: `producto_${uuid.v4()}`,
-            });
-      
-            const data = {
-              nombre,
-              descripcion,
-              costo,
-              precio,
-              id_categoria: categoriaA.id,
-              id_persona: personaA.id,
-              imagen: uploadResult.secure_url,
-            };
-      
-            const result = await producto.update(data, { where: { external_id: external } });
-            if (!result) {
-              return res.status(401).json({ message: "No se puede modificar", code: 401 });
-            }
-      
-            res.status(200).json({ message: "Éxito", code: 200 });
-          } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Error interno del servidor", code: 500, error: error.message });
-          }
         } else {
-          res.status(400).json({ message: "Datos incorrectos", code: 400 });
+            res.status(400).json({ message: "Datos incorrectos", code: 400 });
         }
-      }
+    }
 
 }
 module.exports = ProductoControl;

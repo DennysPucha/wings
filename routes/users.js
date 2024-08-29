@@ -79,12 +79,11 @@ router.get('/obtener/persona/:external', personaController.obtener);
 
 
 router.get('/listar/productos', productoController.listar); //
-router.post('/modificar/producto/:external', productoController.modificar); //
-router.post('/modificar/productosConImagen/:external', productoController.modificarProductoConImagen); 
-router.post('/guardar/productos', productoController.guardar); //
+router.post('/modificar/producto/:external', productoController.modificarProductoConImagen); //
+router.post('/guardar/productos', productoController.guardarProductoConImagen); //
 router.get('/obtener/productos/:external', productoController.obtener); //
 router.post('/darbaja/producto/:external', productoController.darBaja); //
-router.post('/guardar/productosConImagen', productoController.guardarProductoConImagen); //
+//router.post('/guardar/productosConImagen', productoController.guardarProductoConImagen); //
 
 router.get('/listar/categorias', categoriaController.listar); //
 router.post('/modificar/categoria/:external', categoriaController.modificar);
