@@ -274,6 +274,8 @@ class MesaControl {
                         res.status(401);
                         return res.json({ message: "ERROR", tag: "No se puede crear la venta", code: 401 });
                     }
+
+		    const externalNew = uuid.v4();
     
                     const detallesData = await Promise.all(detalles.map(async detalle => {
                         const productoA = await producto.findOne({ where: { external_id: detalle.producto } });
@@ -286,7 +288,7 @@ class MesaControl {
                             cantidad: detalle.cantidad,
                             producto: productoA.external_id,
                             precio: productoA.precio,
-                            external_id: uuid.v4(),
+                            external_id: externalNew,
                             id_venta: resultVenta.id
                         };
                     }));
@@ -302,7 +304,7 @@ class MesaControl {
                     await transaction.commit();
     
                     res.status(200);
-                    res.json({ message: "ÉXITO", code: 200 });
+                    res.json({ message: "ÉXITO", code: 200, data: {external_id: externalVenta} });
                 } catch (error) {
                     await transaction.rollback();
                     res.status(500);

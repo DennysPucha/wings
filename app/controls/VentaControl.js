@@ -11,7 +11,7 @@ class VentaControl{
             const lista = await venta.findOne({
                 where:{external_id:external},
                 include: [{ model: detalle, as: 'detalle', attributes: ['numero','cantidad','producto','precio','external_id'] },],
-                attributes:['numero','fecha','total','subtotal','estado','external_id','hora','metodo']
+                attributes:['numero','fecha','total','subtotal','estado','external_id','hora','metodo','cliente']
             });
             if(!lista){
                 res.status(404);
