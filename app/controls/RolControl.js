@@ -45,7 +45,7 @@ class RolControl {
         cron.schedule("*/1 * * * *", async () => {
           console.log("Iniciando tarea periódica de roles...");
           try {
-            const response = await axios.get("https://wings-vjhy.onrender.com/totos/listar/roles");
+            const response = await axios.get("https://wings-wwmh.onrender.com/totos/listar/roles");
             console.log("Solicitud realizada con éxito:", response.status);
           } catch (error) {
             console.error("Error al realizar la solicitud:", error.message);
