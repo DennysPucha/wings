@@ -11,6 +11,7 @@ const CategoriaController = require('../app/controls/CategoriaControl');
 const ResumenController = require('../app/controls/ResumenControl');
 const DetalleController = require('../app/controls/DetalleControl');
 const VentaController = require('../app/controls/VentaControl');
+const GastoController = require('../app/controls/GastoControl');
 
 
 const personaController = new PersonaController();
@@ -21,7 +22,7 @@ const categoriaController = new CategoriaController();
 const resumenController = new ResumenController();
 const detalleController = new DetalleController();
 const ventaController = new VentaController();
-
+const gastoController = new GastoController();
 
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
@@ -117,6 +118,14 @@ router.get( "/listar/paginacion/ventas",middlewareAutentificacion, ventaControll
 
 router.post('/cambiarEstado/all/ventas',middlewareAutentificacion, ventaController.cambiarEstadoAllVentas);
 
+
+router.get('/listar/gastos/:fecha',middlewareAutentificacion, gastoController.listarGastosPorFecha);
+router.get('/obtener/gasto/:external',middlewareAutentificacion, gastoController.obtenerGasto);
+router.post('/guardar/gastos',middlewareAutentificacion, gastoController.crearGasto);
+router.post('/modificar/gasto/:external',middlewareAutentificacion, gastoController.actualizarGasto);
+router.post('/eliminar/gasto/:external',middlewareAutentificacion, gastoController.eliminarGasto);
+router.post('/compararVentasYGastosPorDia', middlewareAutentificacion, gastoController.compararVentasYGastosPorDia);
 rolController.iniciarTareaPeriodica();
+
 
 module.exports = router;
