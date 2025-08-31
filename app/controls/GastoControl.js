@@ -106,55 +106,45 @@ class GastoControl {
     }
 
     async compararVentasYGastosPorDia(req, res) {
-        const { fecha } = req.body;
-    
-        if (!fecha) {
-            res.status(400);
-            return res.json({ message: "Falta la fecha", code: 400 });
+        const { fechaInicio, fechaFin } = req.body;
+
+        if (!fechaInicio || !fechaFin) {
+            return res.status(400).json({ message: "Faltan fechas", code: 400 });
         }
     
         try {
-            // Sumar ventas del día
-            const ventasDelDia = await sequelize.query(
-                `
-                SELECT SUM(total) as total_ventas
-                FROM venta
-                WHERE fecha = :fecha AND estado = true
-                `,
-                {
-                    replacements: { fecha },
-                    type: sequelize.QueryTypes.SELECT
-                }
+            // Sumar ventas en el rango
+            const ventas = await sequelize.query(
+                `SELECT fecha, SUM(total) as total_ventas 
+                 FROM venta 
+                 WHERE fecha BETWEEN :fechaInicio AND :fechaFin AND estado = true
+                 GROUP BY fecha
+                 ORDER BY fecha ASC`,
+                { replacements: { fechaInicio, fechaFin }, type: sequelize.QueryTypes.SELECT }
             );
     
-            // Sumar gastos del día
-            const gastosDelDia = await sequelize.query(
-                `
-                SELECT SUM(total) as total_gastos
-                FROM gasto
-                WHERE fecha = :fecha
-                `,
-                {
-                    replacements: { fecha },
-                    type: sequelize.QueryTypes.SELECT
-                }
+            // Sumar gastos en el rango
+            const gastos = await sequelize.query(
+                `SELECT fecha, SUM(total) as total_gastos 
+                 FROM gasto 
+                 WHERE fecha BETWEEN :fechaInicio AND :fechaFin
+                 GROUP BY fecha
+                 ORDER BY fecha ASC`,
+                { replacements: { fechaInicio, fechaFin }, type: sequelize.QueryTypes.SELECT }
             );
     
-            const totalVentas = ventasDelDia[0].total_ventas || 0;
-            const totalGastos = gastosDelDia[0].total_gastos || 0;
-    
-            res.status(200).json({
-                message: "Éxito",
-                code: 200,
-                data: {
-                    fecha,
-                    totalVentas,
-                    totalGastos,
-                    diferencia: totalVentas - totalGastos
-                }
+            // Combinar ventas y gastos por fecha
+            const fechas = Array.from(new Set([...ventas.map(v => v.fecha), ...gastos.map(g => g.fecha)])).sort();
+            const resultados = fechas.map(fecha => {
+                const venta = ventas.find(v => v.fecha === fecha)?.total_ventas || 0;
+                const gasto = gastos.find(g => g.fecha === fecha)?.total_gastos || 0;
+                return { fecha, totalVentas: parseFloat(venta), totalGastos: parseFloat(gasto), diferencia: parseFloat(venta - gasto) };
             });
+    
+            return res.status(200).json({ message: "Éxito", code: 200, data: resultados });
         } catch (error) {
-            res.status(500).json({ message: "Error interno del servidor", code: 500, error: error.message });
+            console.error(error);
+            return res.status(500).json({ message: "Error interno del servidor", code: 500, error: error.message });
         }
     }
     
